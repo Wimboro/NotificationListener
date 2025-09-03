@@ -9,14 +9,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.notificationlistener.data.database.entity.NotificationLogEntity
 import com.example.notificationlistener.ui.components.DebugUtilities
 import com.example.notificationlistener.ui.components.LogsSection
 import com.example.notificationlistener.ui.components.PermissionStatusCard
 import com.example.notificationlistener.ui.components.SettingsForm
+import com.example.notificationlistener.ui.state.NotificationListenerUiState
 import com.example.notificationlistener.ui.state.UiEvent
+import com.example.notificationlistener.ui.state.ValidationErrors
+import com.example.notificationlistener.ui.theme.NotificationListenerTheme
 import com.example.notificationlistener.ui.viewmodel.NotificationListenerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,24 +33,126 @@ fun NotificationListenerScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     
+    NotificationListenerScreenContent(
+        uiState = uiState,
+        onEvent = viewModel::handleEvent,
+        modifier = modifier
+    )
+}
+
+// Preview with permission granted
+@Preview(showBackground = true, name = "Permission Granted")
+@Composable
+fun NotificationListenerScreenPreviewGranted() {
+    NotificationListenerTheme {
+        NotificationListenerScreenContent(
+            uiState = NotificationListenerUiState(
+                isNotificationAccessGranted = true,
+                endpointUrl = "https://api.example.com/webhook",
+                apiKey = "sample-api-key",
+                filterPackages = "id.dana, com.whatsapp",
+                forwardAllApps = false,
+                logs = listOf(
+                    NotificationLogEntity(
+                        id = 1,
+                        timestamp = System.currentTimeMillis(),
+                        message = "SUCCESS: Notification sent successfully",
+                        type = "SUCCESS"
+                    ),
+                    NotificationLogEntity(
+                        id = 2,
+                        timestamp = System.currentTimeMillis() - 60000,
+                        message = "INFO: Service started",
+                        type = "INFO"
+                    )
+                ),
+                isLoading = false,
+                validationErrors = ValidationErrors(),
+                showBatteryOptimizationDialog = false,
+                isApiKeyVisible = false
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+// Preview with permission denied
+@Preview(showBackground = true, name = "Permission Denied")
+@Composable
+fun NotificationListenerScreenPreviewDenied() {
+    NotificationListenerTheme {
+        NotificationListenerScreenContent(
+            uiState = NotificationListenerUiState(
+                isNotificationAccessGranted = false,
+                endpointUrl = "",
+                apiKey = "",
+                filterPackages = "",
+                forwardAllApps = false,
+                logs = emptyList(),
+                isLoading = false,
+                validationErrors = ValidationErrors(),
+                showBatteryOptimizationDialog = false,
+                isApiKeyVisible = false
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+// Dark theme preview
+@Preview(showBackground = true, name = "Dark Theme")
+@Composable
+fun NotificationListenerScreenPreviewDark() {
+    NotificationListenerTheme(darkTheme = true) {
+        NotificationListenerScreenContent(
+            uiState = NotificationListenerUiState(
+                isNotificationAccessGranted = true,
+                endpointUrl = "https://api.example.com/webhook",
+                apiKey = "sample-api-key",
+                filterPackages = "id.dana, com.whatsapp",
+                forwardAllApps = true,
+                logs = listOf(
+                    NotificationLogEntity(
+                        id = 1,
+                        timestamp = System.currentTimeMillis(),
+                        message = "ERROR: Failed to send notification",
+                        type = "ERROR"
+                    )
+                ),
+                isLoading = true,
+                validationErrors = ValidationErrors(),
+                showBatteryOptimizationDialog = false,
+                isApiKeyVisible = true
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@Composable
+fun NotificationListenerScreenContent(
+    uiState: NotificationListenerUiState,
+    onEvent: (UiEvent) -> Unit,
+    modifier: Modifier = Modifier
+) {
     // Battery optimization dialog
     if (uiState.showBatteryOptimizationDialog) {
         AlertDialog(
-            onDismissRequest = { viewModel.handleEvent(UiEvent.DismissBatteryOptimizationDialog) },
+            onDismissRequest = { onEvent(UiEvent.DismissBatteryOptimizationDialog) },
             title = { Text("Optimasi Baterai") },
             text = { 
                 Text("Untuk menjaga layanan tetap aktif, disarankan untuk menonaktifkan optimasi baterai untuk aplikasi ini.")
             },
             confirmButton = {
                 TextButton(
-                    onClick = { viewModel.handleEvent(UiEvent.OpenBatteryOptimizationSettings) }
+                    onClick = { onEvent(UiEvent.OpenBatteryOptimizationSettings) }
                 ) {
                     Text("Buka Pengaturan")
                 }
             },
             dismissButton = {
                 TextButton(
-                    onClick = { viewModel.handleEvent(UiEvent.DismissBatteryOptimizationDialog) }
+                    onClick = { onEvent(UiEvent.DismissBatteryOptimizationDialog) }
                 ) {
                     Text("Nanti")
                 }
@@ -56,43 +163,43 @@ fun NotificationListenerScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(15.dp)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         // Title
-        Text(
-            text = "Notification Listener",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth()
-        )
+        //Text(
+        //    text = "Notification Listener",
+        //    style = MaterialTheme.typography.headlineMedium,
+        //    fontWeight = FontWeight.Bold,
+        //    textAlign = TextAlign.Center,
+        //    modifier = Modifier.fillMaxWidth()
+        //)
         
         // Permission Status
         PermissionStatusCard(
             isGranted = uiState.isNotificationAccessGranted,
-            onCheckStatus = { viewModel.handleEvent(UiEvent.CheckPermissionStatus) },
-            onOpenSettings = { viewModel.handleEvent(UiEvent.OpenNotificationSettings) }
+            onCheckStatus = { onEvent(UiEvent.CheckPermissionStatus) },
+            onOpenSettings = { onEvent(UiEvent.OpenNotificationSettings) }
         )
         
         // Settings Form
         SettingsForm(
             uiState = uiState,
-            onEvent = viewModel::handleEvent
+            onEvent = onEvent
         )
         
         // Logs Section
         LogsSection(
             logs = uiState.logs,
-            onClearLogs = { viewModel.handleEvent(UiEvent.ClearLogs) },
-            onShareLogs = { viewModel.handleEvent(UiEvent.ShareLogs) }
+            onClearLogs = { onEvent(UiEvent.ClearLogs) },
+            onShareLogs = { onEvent(UiEvent.ShareLogs) }
         )
         
         // Debug Utilities
         DebugUtilities(
-            onTestSend = { viewModel.handleEvent(UiEvent.TestSend) },
-            onCopySettings = { viewModel.handleEvent(UiEvent.CopySettings) }
+            onTestSend = { onEvent(UiEvent.TestSend) },
+            onCopySettings = { onEvent(UiEvent.CopySettings) }
         )
     }
 }

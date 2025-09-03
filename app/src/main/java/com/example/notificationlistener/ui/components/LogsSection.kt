@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.notificationlistener.data.database.entity.NotificationLogEntity
+import com.example.notificationlistener.ui.theme.NotificationListenerTheme
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -159,6 +161,85 @@ fun LogItem(
             fontFamily = FontFamily.Monospace,
             color = textColor,
             modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Logs Section - Empty")
+@Composable
+fun LogsSectionPreviewEmpty() {
+    NotificationListenerTheme {
+        LogsSection(
+            logs = emptyList(),
+            onClearLogs = {},
+            onShareLogs = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Logs Section - With Logs")
+@Composable
+fun LogsSectionPreviewWithLogs() {
+    NotificationListenerTheme {
+        LogsSection(
+            logs = listOf(
+                NotificationLogEntity(
+                    id = 1,
+                    timestamp = System.currentTimeMillis(),
+                    message = "SUCCESS: Notification sent successfully to webhook",
+                    type = "SUCCESS"
+                ),
+                NotificationLogEntity(
+                    id = 2,
+                    timestamp = System.currentTimeMillis() - 60000,
+                    message = "ERROR: Failed to send notification - connection timeout",
+                    type = "ERROR"
+                ),
+                NotificationLogEntity(
+                    id = 3,
+                    timestamp = System.currentTimeMillis() - 120000,
+                    message = "INFO: Service started and listening for notifications",
+                    type = "INFO"
+                ),
+                NotificationLogEntity(
+                    id = 4,
+                    timestamp = System.currentTimeMillis() - 180000,
+                    message = "QUEUED: Notification added to retry queue",
+                    type = "QUEUED"
+                )
+            ),
+            onClearLogs = {},
+            onShareLogs = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Log Item - Success")
+@Composable
+fun LogItemPreviewSuccess() {
+    NotificationListenerTheme {
+        LogItem(
+            log = NotificationLogEntity(
+                id = 1,
+                timestamp = System.currentTimeMillis(),
+                message = "SUCCESS: Notification sent successfully",
+                type = "SUCCESS"
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Log Item - Error")
+@Composable
+fun LogItemPreviewError() {
+    NotificationListenerTheme {
+        LogItem(
+            log = NotificationLogEntity(
+                id = 2,
+                timestamp = System.currentTimeMillis(),
+                message = "ERROR: Failed to send notification - network error",
+                type = "ERROR"
+            )
         )
     }
 }

@@ -10,9 +10,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.notificationlistener.ui.state.NotificationListenerUiState
 import com.example.notificationlistener.ui.state.UiEvent
+import com.example.notificationlistener.ui.state.ValidationErrors
+import com.example.notificationlistener.ui.theme.NotificationListenerTheme
 
 @Composable
 fun SettingsForm(
@@ -118,5 +121,84 @@ fun SettingsForm(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Settings Form - Empty")
+@Composable
+fun SettingsFormPreviewEmpty() {
+    NotificationListenerTheme {
+        SettingsForm(
+            uiState = NotificationListenerUiState(
+                endpointUrl = "",
+                apiKey = "",
+                filterPackages = "",
+                forwardAllApps = false,
+                isLoading = false,
+                validationErrors = ValidationErrors(),
+                isApiKeyVisible = false
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Settings Form - Filled")
+@Composable
+fun SettingsFormPreviewFilled() {
+    NotificationListenerTheme {
+        SettingsForm(
+            uiState = NotificationListenerUiState(
+                endpointUrl = "https://api.example.com/webhook",
+                apiKey = "sample-api-key-123456",
+                filterPackages = "id.dana, com.whatsapp, com.tokopedia",
+                forwardAllApps = true,
+                isLoading = false,
+                validationErrors = ValidationErrors(),
+                isApiKeyVisible = false
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Settings Form - Loading")
+@Composable
+fun SettingsFormPreviewLoading() {
+    NotificationListenerTheme {
+        SettingsForm(
+            uiState = NotificationListenerUiState(
+                endpointUrl = "https://api.example.com/webhook",
+                apiKey = "sample-api-key",
+                filterPackages = "id.dana",
+                forwardAllApps = false,
+                isLoading = true,
+                validationErrors = ValidationErrors(),
+                isApiKeyVisible = false
+            ),
+            onEvent = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Settings Form - With Errors")
+@Composable
+fun SettingsFormPreviewErrors() {
+    NotificationListenerTheme {
+        SettingsForm(
+            uiState = NotificationListenerUiState(
+                endpointUrl = "invalid-url",
+                apiKey = "",
+                filterPackages = "invalid package name",
+                forwardAllApps = false,
+                isLoading = false,
+                validationErrors = ValidationErrors(
+                    endpointUrl = "URL tidak valid",
+                    filterPackages = "Format package tidak valid"
+                ),
+                isApiKeyVisible = false
+            ),
+            onEvent = {}
+        )
     }
 }

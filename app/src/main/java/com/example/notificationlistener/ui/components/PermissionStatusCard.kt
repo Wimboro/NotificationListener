@@ -12,7 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.notificationlistener.ui.theme.NotificationListenerTheme
 
 @Composable
 fun PermissionStatusCard(
@@ -83,5 +85,41 @@ fun PermissionStatusCard(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Permission Granted")
+@Composable
+fun PermissionStatusCardPreviewGranted() {
+    NotificationListenerTheme {
+        PermissionStatusCard(
+            isGranted = true,
+            onCheckStatus = {},
+            onOpenSettings = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Permission Denied")
+@Composable
+fun PermissionStatusCardPreviewDenied() {
+    NotificationListenerTheme {
+        PermissionStatusCard(
+            isGranted = false,
+            onCheckStatus = {},
+            onOpenSettings = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Permission Granted - Dark")
+@Composable
+fun PermissionStatusCardPreviewGrantedDark() {
+    NotificationListenerTheme(darkTheme = true) {
+        PermissionStatusCard(
+            isGranted = true,
+            onCheckStatus = {},
+            onOpenSettings = {}
+        )
     }
 }

@@ -5,7 +5,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.notificationlistener.ui.theme.NotificationListenerTheme
 
 @Composable
 fun DebugUtilities(
@@ -45,5 +47,27 @@ fun DebugUtilities(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true, name = "Debug Utilities")
+@Composable
+fun DebugUtilitiesPreview() {
+    NotificationListenerTheme {
+        DebugUtilities(
+            onTestSend = {},
+            onCopySettings = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Debug Utilities - Dark")
+@Composable
+fun DebugUtilitiesPreviewDark() {
+    NotificationListenerTheme(darkTheme = true) {
+        DebugUtilities(
+            onTestSend = {},
+            onCopySettings = {}
+        )
     }
 }
