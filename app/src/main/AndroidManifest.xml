@@ -10,9 +10,9 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    
+
     <!-- Notification Listener permission -->
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" 
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -26,6 +26,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotificationListener">
 
+        <!-- Remove default WorkManager initializer when using custom configuration -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
         <!-- Main Activity -->
         <activity
             android:name=".ui.MainActivity"
@@ -36,7 +48,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <!-- Notification Listener Service -->
         <service
             android:name=".service.NotificationCaptureService"
@@ -46,13 +58,13 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-        
+
         <!-- Foreground Service -->
         <service
             android:name=".service.ForegroundService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
-        
+
         <!-- Boot Completed Receiver -->
         <receiver
             android:name=".receiver.BootCompletedReceiver"
@@ -65,7 +77,7 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        
+
     </application>
 
 </manifest>
