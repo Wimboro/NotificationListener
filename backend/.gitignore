@@ -60,3 +60,9 @@ jspm_packages/
 # OS
 .DS_Store
 Thumbs.db
+
+# Cloudflare Workers
+backend/.wrangler/
+backend/wrangler.toml.backup
+backend/wrangler.toml
+wrangler.toml
