@@ -7,15 +7,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.notificationlistener"
+    namespace = "com.hiddencyber.notificationlistener"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.example.notificationlistener"
+        applicationId = "com.hiddencyber.notificationlistener"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

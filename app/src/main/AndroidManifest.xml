@@ -16,7 +16,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name=".NotificationListenerApplication"
+        android:name="com.hiddencyber.notificationlistener.NotificationListenerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -40,7 +40,7 @@
 
         <!-- Main Activity -->
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.hiddencyber.notificationlistener.ui.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.NotificationListener">
             <intent-filter>
@@ -51,7 +51,7 @@
 
         <!-- Notification Listener Service -->
         <service
-            android:name=".service.NotificationCaptureService"
+            android:name="com.hiddencyber.notificationlistener.service.NotificationCaptureService"
             android:exported="false"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
             <intent-filter>
@@ -61,13 +61,13 @@
 
         <!-- Foreground Service -->
         <service
-            android:name=".service.ForegroundService"
+            android:name="com.hiddencyber.notificationlistener.service.ForegroundService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 
         <!-- Boot Completed Receiver -->
         <receiver
-            android:name=".receiver.BootCompletedReceiver"
+            android:name="com.hiddencyber.notificationlistener.receiver.BootCompletedReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter android:priority="1000">
