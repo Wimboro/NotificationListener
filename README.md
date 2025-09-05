@@ -183,7 +183,7 @@ curl -X POST "https://api.example.com/webhook" \
 
 ### Package Structure
 ```
-com.example.notificationlistener/
+com.hiddencyber.notificationlistener/
 ├── data/
 │   ├── database/         # Room entities, DAOs, database
 │   ├── model/           # API models and data classes
