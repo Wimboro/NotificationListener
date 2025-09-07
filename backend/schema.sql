@@ -22,3 +22,25 @@ CREATE TABLE IF NOT EXISTS devices (
     total_notifications INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+-- QRIS Payment Integration Tables
+CREATE TABLE IF NOT EXISTS payment_expectations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_reference TEXT UNIQUE NOT NULL,
+    expected_amount TEXT NOT NULL,
+    unique_amount TEXT,
+    original_amount TEXT,
+    callback_url TEXT,
+    status TEXT DEFAULT 'pending',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    completed_at DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS unique_amounts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    unique_amount TEXT UNIQUE NOT NULL,
+    order_reference TEXT,
+    status TEXT DEFAULT 'used',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME
+);
