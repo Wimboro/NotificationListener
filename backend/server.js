@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const qrisIntegration = require('./qris-integration');
 require('dotenv').config();
 
 const app = express();
@@ -50,6 +51,9 @@ db.serialize(() => {
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `);
+    
+    // Add payment expectations table setup
+    qrisIntegration.setupPaymentExpectationsTable(db);
 });
 
 // API Key validation middleware
@@ -136,6 +140,11 @@ app.post('/webhook', validateApiKey, (req, res) => {
                 text: text?.substring(0, 50) + (text?.length > 50 ? '...' : ''),
                 amountDetected
             });
+
+            // ENHANCED: Check for payment matches if amount detected
+            if (amountDetected) {
+                qrisIntegration.checkPaymentMatch(db, text, title, bigText, amountDetected);
+            }
 
             res.json({
                 success: true,
@@ -252,6 +261,9 @@ app.get('/stats', validateApiKey, (req, res) => {
         });
     });
 });
+
+// Add QRIS routes
+qrisIntegration.setupQRISRoutes(app, validateApiKey, db);
 
 // Error handling
 app.use((err, req, res, next) => {
