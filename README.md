@@ -2,6 +2,26 @@
 
 A complete Android application for capturing and forwarding system notifications to external APIs with queue management and retry mechanisms.
 
+## Support This Project
+
+<p>
+  <a href="https://saweria.co/HiddenCyber">
+    <img src="https://asset.hiddencyber.online/donate-buttons/saweria.svg" alt="Donasi via Saweria" height="56">
+  </a>
+
+  <a href="https://support.hiddencyber.online">
+    <img src="https://asset.hiddencyber.online/donate-buttons/qris.svg" alt="Dukungan via QRIS" height="56">
+  </a>
+
+  <a href="https://ko-fi.com/hiddencyber">
+    <img src="https://asset.hiddencyber.online/donate-buttons/ko-fi.svg" alt="Ko-fi untuk HiddenCyber" height="56">
+  </a>
+
+  <a href="https://paypal.me/wimboro">
+    <img src="https://asset.hiddencyber.online/donate-buttons/paypal.svg" alt="Donasi via PayPal" height="56">
+  </a>
+</p>
+
 ## Project Structure
 
 - **`app/`** - Android application (Kotlin + Jetpack Compose)
